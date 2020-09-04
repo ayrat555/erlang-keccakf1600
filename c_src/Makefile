@@ -94,14 +94,14 @@ ifneq ($(CROSSCOMPILER),)
 	CC = $(CROSSCOMPILER)gcc
 endif
 
-CFLAGS += -I"$(ERTS_INCLUDE_DIR)" -I"$(ERL_INTERFACE_INCLUDE_DIR)"
-CXXFLAGS += -I"$(ERTS_INCLUDE_DIR)" -I"$(ERL_INTERFACE_INCLUDE_DIR)"
+CFLAGS += -I"$(ERTS_INCLUDE_DIR)"
+CXXFLAGS += -I"$(ERTS_INCLUDE_DIR)"
 
-LDLIBS += -L"$(ERL_INTERFACE_LIB_DIR)" -lerl_interface -lei
+LDLIBS += -lei
 
 # Dependencies.
 
-ALL_DEPS_OUTPUT ?= 
+ALL_DEPS_OUTPUT ?=
 
 # Verbosity.
 
@@ -184,11 +184,7 @@ $(C_SRC_ENV):
 	$(verbose) $(ERL) -eval "file:write_file(\"$(call core_native_path,$(C_SRC_ENV))\", \
 		io_lib:format( \
 			\"ERTS_INCLUDE_DIR ?= ~s/erts-~s/include/~n\" \
-			\"ERL_INTERFACE_INCLUDE_DIR ?= ~s~n\" \
-			\"ERL_INTERFACE_LIB_DIR ?= ~s~n\", \
 			[code:root_dir(), erlang:system_info(version), \
-			code:lib_dir(erl_interface, include), \
-			code:lib_dir(erl_interface, lib)])), \
 		halt()."
 
 distclean:: distclean-deps distclean-env
